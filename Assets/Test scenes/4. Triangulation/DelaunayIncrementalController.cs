@@ -81,7 +81,7 @@ public class DelaunayIncrementalController : MonoBehaviour
         foreach (Triangle2 t in triangles_2d_normalized)
         {
             //UnNormalize here
-            triangles_3d.Add(new Triangle3(HelpMethods.UnNormalize(t.p1, normalizingBox).ToMyVector3(), HelpMethods.UnNormalize(t.p2, normalizingBox).ToMyVector3(), HelpMethods.UnNormalize(t.p3, normalizingBox).ToMyVector3()));
+            triangles_3d.Add(new Triangle3(HelpMethods.UnNormalize(t.p1, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p2, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p3, normalizingBox, dMax).ToMyVector3()));
         }
 
         triangulatedMesh = _TransformBetweenDataStructures.Triangle3ToCompressedMesh(triangles_3d, triangulatedMesh); 

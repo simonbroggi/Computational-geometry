@@ -68,9 +68,9 @@ public class PolygonClippingController : MonoBehaviour
 
         float dMax = HelpMethods.CalculateDMax(normalizingBox);
 
-        List<MyVector2> poly_normalized = HelpMethods.Normalize(poly, normalizingBox);
+        List<MyVector2> poly_normalized = HelpMethods.Normalize(poly, normalizingBox, dMax);
 
-        List<MyVector2> clipPoly_normalized = HelpMethods.Normalize(clipPoly, normalizingBox);
+        List<MyVector2> clipPoly_normalized = HelpMethods.Normalize(clipPoly, normalizingBox, dMax);
 
 
         //Main algorithm
@@ -78,7 +78,7 @@ public class PolygonClippingController : MonoBehaviour
 
 
         //UnNormalize
-        List<MyVector2> polygonAfterClipping = HelpMethods.UnNormalize(polygonAfterClipping_Normalized, normalizingBox);
+        List<MyVector2> polygonAfterClipping = HelpMethods.UnNormalize(polygonAfterClipping_Normalized, normalizingBox, dMax);
 
         //2d to 3d
         List<Vector3> polygonAfterClipping3D = new List<Vector3>();
@@ -104,9 +104,11 @@ public class PolygonClippingController : MonoBehaviour
 
         AABB2 normalizingBox = new AABB2(allPoints);
 
-        List<MyVector2> poly_normalized = HelpMethods.Normalize(poly, normalizingBox);
+        float dMax = HelpMethods.CalculateDMax(normalizingBox);
 
-        List<MyVector2> clipPoly_normalized = HelpMethods.Normalize(clipPoly, normalizingBox);
+        List<MyVector2> poly_normalized = HelpMethods.Normalize(poly, normalizingBox, dMax);
+
+        List<MyVector2> clipPoly_normalized = HelpMethods.Normalize(clipPoly, normalizingBox, dMax);
 
 
 
@@ -124,7 +126,7 @@ public class PolygonClippingController : MonoBehaviour
             Debug.Log("Vertices in this polygon: " + thisPolygon_normalized.Count);
 
             //Unnormalized
-            List<MyVector2> thisPolygon = HelpMethods.UnNormalize(thisPolygon_normalized, normalizingBox);
+            List<MyVector2> thisPolygon = HelpMethods.UnNormalize(thisPolygon_normalized, normalizingBox, dMax);
 
             //2d to 3d
             List<Vector3> polygonAfterClipping3D = new List<Vector3>();

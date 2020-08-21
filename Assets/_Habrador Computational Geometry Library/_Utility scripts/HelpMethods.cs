@@ -53,10 +53,10 @@ namespace Habrador_Computational_Geometry
         //Normalize stuff
 
         //MyVector2
-        public static MyVector2 Normalize(MyVector2 point, AABB2 boundingBox)
+        public static MyVector2 Normalize(MyVector2 point, AABB2 boundingBox, float dMax)
         {
-            float x = (point.x - boundingBox.minX) / (boundingBox.maxX-boundingBox.minX);
-            float y = (point.y - boundingBox.minY) / (boundingBox.maxY-boundingBox.minY);
+            float x = (point.x - boundingBox.minX) / dMax;
+            float y = (point.y - boundingBox.minY) / dMax;
 
             MyVector2 pNormalized = new MyVector2(x, y);
 
@@ -64,26 +64,26 @@ namespace Habrador_Computational_Geometry
         }
 
         //List<MyVector2>
-        public static List<MyVector2> Normalize(List<MyVector2> points, AABB2 boundingBox)
+        public static List<MyVector2> Normalize(List<MyVector2> points, AABB2 boundingBox, float dMax)
         {
             List<MyVector2> normalizedPoints = new List<MyVector2>();
 
             foreach (MyVector2 p in points)
             {
-                normalizedPoints.Add(Normalize(p, boundingBox));
+                normalizedPoints.Add(Normalize(p, boundingBox, dMax));
             }
 
             return normalizedPoints;
         }
 
         //HashSet<MyVector2> 
-        public static HashSet<MyVector2> Normalize(HashSet<MyVector2> points, AABB2 boundingBox)
+        public static HashSet<MyVector2> Normalize(HashSet<MyVector2> points, AABB2 boundingBox, float dMax)
         {
             HashSet<MyVector2> normalizedPoints = new HashSet<MyVector2>();
 
             foreach (MyVector2 p in points)
             {
-                normalizedPoints.Add(Normalize(p, boundingBox));
+                normalizedPoints.Add(Normalize(p, boundingBox, dMax));
             }
 
             return normalizedPoints;
@@ -93,10 +93,10 @@ namespace Habrador_Computational_Geometry
         //UnNormalize different stuff
 
         //MyVector2
-        public static MyVector2 UnNormalize(MyVector2 point, AABB2 boundingBox)
+        public static MyVector2 UnNormalize(MyVector2 point, AABB2 boundingBox, float dMax)
         {
-            float x = (point.x * (boundingBox.maxX-boundingBox.minX)) + boundingBox.minX;
-            float y = (point.y * (boundingBox.maxY-boundingBox.minY)) + boundingBox.minY;
+            float x = (point.x * dMax) + boundingBox.minX;
+            float y = (point.y * dMax) + boundingBox.minY;
 
             MyVector2 pUnNormalized = new MyVector2(x, y);
 
@@ -104,13 +104,13 @@ namespace Habrador_Computational_Geometry
         }
 
         //List<MyVector2>
-        public static List<MyVector2> UnNormalize(List<MyVector2> normalized, AABB2 aabb)
+        public static List<MyVector2> UnNormalize(List<MyVector2> normalized, AABB2 aabb, float dMax)
         {
             List<MyVector2> unNormalized = new List<MyVector2>();
 
             foreach (MyVector2 p in normalized)
             {
-                MyVector2 pUnNormalized = UnNormalize(p, aabb);
+                MyVector2 pUnNormalized = UnNormalize(p, aabb, dMax);
 
                 unNormalized.Add(pUnNormalized);
             }
@@ -119,15 +119,15 @@ namespace Habrador_Computational_Geometry
         }
 
         //HashSet<Triangle2>
-        public static HashSet<Triangle2> UnNormalize(HashSet<Triangle2> normalized, AABB2 aabb)
+        public static HashSet<Triangle2> UnNormalize(HashSet<Triangle2> normalized, AABB2 aabb, float dMax)
         {
             HashSet<Triangle2> unNormalized = new HashSet<Triangle2>();
 
             foreach (Triangle2 t in normalized)
             {
-                MyVector2 p1 = HelpMethods.UnNormalize(t.p1, aabb);
-                MyVector2 p2 = HelpMethods.UnNormalize(t.p2, aabb);
-                MyVector2 p3 = HelpMethods.UnNormalize(t.p3, aabb);
+                MyVector2 p1 = HelpMethods.UnNormalize(t.p1, aabb, dMax);
+                MyVector2 p2 = HelpMethods.UnNormalize(t.p2, aabb, dMax);
+                MyVector2 p3 = HelpMethods.UnNormalize(t.p3, aabb, dMax);
 
                 Triangle2 tUnNormalized = new Triangle2(p1, p2, p3);
 
@@ -138,11 +138,11 @@ namespace Habrador_Computational_Geometry
         }
 
         //HalfEdgeData2
-        public static HalfEdgeData2 UnNormalize(HalfEdgeData2 data, AABB2 aabb)
+        public static HalfEdgeData2 UnNormalize(HalfEdgeData2 data, AABB2 aabb, float dMax)
         {
             foreach (HalfEdgeVertex2 v in data.vertices)
             {
-                MyVector2 vUnNormalized = HelpMethods.UnNormalize(v.position, aabb);
+                MyVector2 vUnNormalized = HelpMethods.UnNormalize(v.position, aabb, dMax);
 
                 v.position = vUnNormalized;
             }
@@ -151,20 +151,20 @@ namespace Habrador_Computational_Geometry
         }
 
         //List<VoronoiCell2>
-        public static List<VoronoiCell2> UnNormalize(List<VoronoiCell2> data, AABB2 aabb)
+        public static List<VoronoiCell2> UnNormalize(List<VoronoiCell2> data, AABB2 aabb, float dMax)
         {
             List<VoronoiCell2> unNormalizedData = new List<VoronoiCell2>();
 
             foreach (VoronoiCell2 cell in data)
             {
-                MyVector2 sitePosUnNormalized = HelpMethods.UnNormalize(cell.sitePos, aabb);
+                MyVector2 sitePosUnNormalized = HelpMethods.UnNormalize(cell.sitePos, aabb, dMax);
 
                 VoronoiCell2 cellUnNormalized = new VoronoiCell2(sitePosUnNormalized);
 
                 foreach (VoronoiEdge2 e in cell.edges)
                 {
-                    MyVector2 p1UnNormalized = HelpMethods.UnNormalize(e.p1, aabb);
-                    MyVector2 p2UnNormalized = HelpMethods.UnNormalize(e.p2, aabb);
+                    MyVector2 p1UnNormalized = HelpMethods.UnNormalize(e.p1, aabb, dMax);
+                    MyVector2 p2UnNormalized = HelpMethods.UnNormalize(e.p2, aabb, dMax);
 
                     VoronoiEdge2 eUnNormalized = new VoronoiEdge2(p1UnNormalized, p2UnNormalized, sitePosUnNormalized);
 

@@ -381,7 +381,7 @@ namespace Habrador_Computational_Geometry
         {
             foreach (MyVector2 p in points)
             {
-                MyVector2 pUnNormalize = HelpMethods.UnNormalize(p, normalizingbox);
+                MyVector2 pUnNormalize = HelpMethods.UnNormalize(p, normalizingbox, dMax);
             
                 Debug.DrawLine(pUnNormalize.ToVector3(), Vector3.zero, Color.blue, 3f);
             }
