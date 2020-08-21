@@ -328,5 +328,50 @@ namespace Habrador_Computational_Geometry
                 return mesh;
             }
         }
+
+        public static Mesh VoronoiCellToMesh(VoronoiCell2 cell, Mesh mesh = null)
+        {
+            Vector3 p1 = cell.sitePos.ToVector3();
+
+            Gizmos.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f);
+
+            List<Vector3> vertices = new List<Vector3>();
+
+            List<int> triangles = new List<int>();
+
+            vertices.Add(p1);
+
+            for (int j = 0; j < cell.edges.Count; j++)
+            {
+                Vector3 p2 = cell.edges[j].p1.ToVector3();
+                Vector3 p3 = cell.edges[j].p2.ToVector3();
+
+                //p3 before p2 to get correct orientation pr the triangle will be upside-down
+                vertices.Add(p3);
+                vertices.Add(p2);
+
+                triangles.Add(0);
+                triangles.Add(vertices.Count - 2);
+                triangles.Add(vertices.Count - 1);
+
+            }
+            
+            if(mesh == null)
+            {
+                mesh = new Mesh();
+            }
+            else
+            {
+                mesh.Clear();
+            }
+
+            mesh.vertices = vertices.ToArray();
+
+            mesh.triangles = triangles.ToArray();
+
+            mesh.RecalculateNormals();
+
+            return mesh;
+        }
     }
 }
