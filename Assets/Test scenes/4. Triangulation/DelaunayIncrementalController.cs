@@ -11,7 +11,7 @@ public class DelaunayIncrementalController : MonoBehaviour
     public Rect bounds;
     AABB2 normalizingBox; // Rect in Habrador? what's the difference to Rect??
     float dMax;
-    HalfEdgeData2 triangleData_normalized;
+    HalfEdgeData2 delaunayData_normalized;
 
     void Start()
     {
@@ -33,8 +33,8 @@ public class DelaunayIncrementalController : MonoBehaviour
         triangles_normalized.Add(quadTri2);
 
         //Change to half-edge data structure
-        triangleData_normalized = new HalfEdgeData2();
-        _TransformBetweenDataStructures.Triangle2ToHalfEdge2(triangles_normalized, triangleData_normalized);
+        delaunayData_normalized = new HalfEdgeData2();
+        _TransformBetweenDataStructures.Triangle2ToHalfEdge2(triangles_normalized, delaunayData_normalized);
     }
 
     void InitializeMeshComponents()
@@ -67,7 +67,7 @@ public class DelaunayIncrementalController : MonoBehaviour
         // random value within bounds, normalized
         float x = (normalizingBox.maxX - normalizingBox.minX) * Random.value / dMax;
         float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
-        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), triangleData_normalized, ref missedPoints, ref flippedEdges);
+        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges);
     }
 
     private void Update()
@@ -78,7 +78,7 @@ public class DelaunayIncrementalController : MonoBehaviour
         }
 
         //From half-edge to triangle
-        HashSet<Triangle2> triangles_2d_normalized = _TransformBetweenDataStructures.HalfEdge2ToTriangle2(triangleData_normalized);
+        HashSet<Triangle2> triangles_2d_normalized = _TransformBetweenDataStructures.HalfEdge2ToTriangle2(delaunayData_normalized);
 
         //From 2d to 3d
         HashSet<Triangle3> triangles_3d = new HashSet<Triangle3>();
