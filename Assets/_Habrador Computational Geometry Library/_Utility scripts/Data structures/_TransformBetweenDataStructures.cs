@@ -152,7 +152,7 @@ namespace Habrador_Computational_Geometry
 
         //Version 1. Check that each vertex exists only once in the final mesh
         //Make sure the triangles have the correct orientation
-        public static Mesh Triangle3ToCompressedMesh(HashSet<Triangle3> triangles)
+        public static Mesh Triangle3ToCompressedMesh(HashSet<Triangle3> triangles, Mesh mesh = null)
         {
             if (triangles == null)
             {
@@ -212,7 +212,13 @@ namespace Habrador_Computational_Geometry
 
 
             //Step4. Create the final mesh
-            Mesh mesh = new Mesh();
+            if(mesh == null)
+            {
+                mesh = new Mesh();
+            }
+            {
+                mesh.Clear();
+            }
 
             //From MyVector3 to Vector3
             Vector3[] meshVerticesArray = new Vector3[meshVertices.Count];
