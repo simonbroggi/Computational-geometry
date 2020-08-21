@@ -244,7 +244,7 @@ namespace Habrador_Computational_Geometry
 
         //Version 2. Don't check for duplicate vertices, which can be good if we want a low-poly style mesh
         //Make sure the triangles have the correct orientation
-        public static Mesh Triangle3ToMesh(HashSet<Triangle3> triangles)
+        public static Mesh Triangle3ToMesh(HashSet<Triangle3> triangles, Mesh mesh = null)
         {
             //Create the list with all vertices and triangles
             List<MyVector3> meshVertices = new List<MyVector3>();
@@ -272,7 +272,14 @@ namespace Habrador_Computational_Geometry
             }
 
             //Create the final mesh
-            Mesh mesh = new Mesh();
+            if(mesh == null)
+            {
+                mesh = new Mesh();
+            }
+            else
+            {
+                mesh.Clear();
+            }
 
             //From MyVector3 to Vector3
             Vector3[] meshVerticesArray = new Vector3[meshVertices.Count];
@@ -297,7 +304,7 @@ namespace Habrador_Computational_Geometry
         //
 
         //meshHeight is the y coordinate in 3d space
-        public static Mesh Triangles2ToMesh(HashSet<Triangle2> triangles, bool useCompressedMesh, float meshHeight = 0f)
+        public static Mesh Triangles2ToMesh(HashSet<Triangle2> triangles, bool useCompressedMesh, float meshHeight = 0f, Mesh mesh = null)
         {
             //2d to 3d
             HashSet<Triangle3> triangles_3d = new HashSet<Triangle3>();
@@ -310,13 +317,13 @@ namespace Habrador_Computational_Geometry
             //To mesh
             if (useCompressedMesh)
             {
-                Mesh mesh = _TransformBetweenDataStructures.Triangle3ToCompressedMesh(triangles_3d);
+                mesh = _TransformBetweenDataStructures.Triangle3ToCompressedMesh(triangles_3d, mesh);
 
                 return mesh;
             }
             else
             {
-                Mesh mesh = _TransformBetweenDataStructures.Triangle3ToMesh(triangles_3d);
+                mesh = _TransformBetweenDataStructures.Triangle3ToMesh(triangles_3d, mesh);
 
                 return mesh;
             }
