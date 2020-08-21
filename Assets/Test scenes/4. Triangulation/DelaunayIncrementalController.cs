@@ -21,11 +21,15 @@ public class DelaunayIncrementalController : MonoBehaviour
         normalizingBox = new AABB2(bounds.xMin, bounds.xMax, bounds.yMin, bounds.yMax);
         dMax = HelpMethods.CalculateDMax(normalizingBox);
 
-        Triangle2 superTriangle = new Triangle2(new MyVector2(-10f, -10f), new MyVector2(10f, -10f), new MyVector2(0f, 10f));
+        // Triangle2 superTriangle = new Triangle2(new MyVector2(-10f, -10f), new MyVector2(10f, -10f), new MyVector2(0f, 10f));
+        Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(1f, 0f), new MyVector2(0f, 1f));
+        Triangle2 quadTri2 = new Triangle2(new MyVector2(1f, 0f), new MyVector2(1f, 1f), new MyVector2(0f, 1f));
+        
 
-        //Create the triangulation data with the only triangle we have
+        //Create the triangulation data with a quad
         HashSet<Triangle2> triangles = new HashSet<Triangle2>();
-        triangles.Add(superTriangle);
+        triangles.Add(quadTri1);
+        triangles.Add(quadTri2);
 
         //Change to half-edge data structure
         triangleData_normalized = new HalfEdgeData2();
