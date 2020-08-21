@@ -22,18 +22,20 @@ public class DelaunayIncrementalController : MonoBehaviour
         dMax = HelpMethods.CalculateDMax(normalizingBox);
 
         // Triangle2 superTriangle = new Triangle2(new MyVector2(-10f, -10f), new MyVector2(10f, -10f), new MyVector2(0f, 10f));
-        Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(1f, 0f), new MyVector2(0f, 1f));
-        Triangle2 quadTri2 = new Triangle2(new MyVector2(1f, 0f), new MyVector2(1f, 1f), new MyVector2(0f, 1f));
+        float rightNormalized = (normalizingBox.maxX - normalizingBox.minX) / dMax;
+        float topNormalized = (normalizingBox.maxY - normalizingBox.minY) / dMax;
+        Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(rightNormalized, 0f), new MyVector2(0f, topNormalized));
+        Triangle2 quadTri2 = new Triangle2(new MyVector2(rightNormalized, 0f), new MyVector2(rightNormalized, topNormalized), new MyVector2(0f, topNormalized));
         
 
         //Create the triangulation data with a quad
-        HashSet<Triangle2> triangles = new HashSet<Triangle2>();
-        triangles.Add(quadTri1);
-        triangles.Add(quadTri2);
+        HashSet<Triangle2> triangles_normalized = new HashSet<Triangle2>();
+        triangles_normalized.Add(quadTri1);
+        triangles_normalized.Add(quadTri2);
 
         //Change to half-edge data structure
         triangleData_normalized = new HalfEdgeData2();
-        _TransformBetweenDataStructures.Triangle2ToHalfEdge2(triangles, triangleData_normalized);
+        _TransformBetweenDataStructures.Triangle2ToHalfEdge2(triangles_normalized, triangleData_normalized);
     }
 
     void InitializeMeshComponents()
@@ -62,7 +64,11 @@ public class DelaunayIncrementalController : MonoBehaviour
         //These are for display purposes only
         int missedPoints = 0;
         int flippedEdges = 0;
-        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(Random.value, Random.value), triangleData_normalized, ref missedPoints, ref flippedEdges);
+
+        // random value within bounds, normalized
+        float x = (normalizingBox.maxX - normalizingBox.minX) * Random.value / dMax;
+        float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
+        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), triangleData_normalized, ref missedPoints, ref flippedEdges);
     }
 
     private void Update()
