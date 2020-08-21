@@ -72,18 +72,16 @@ public class DelaunayIncrementalController : MonoBehaviour
             AddRandomPoint();
         }
 
-        //UnNormalize
-        HalfEdgeData2 triangleData = HelpMethods.UnNormalize(triangleData_normalized, normalizingBox, dMax);
-
         //From half-edge to triangle
-        HashSet<Triangle2> triangles_2d = _TransformBetweenDataStructures.HalfEdge2ToTriangle2(triangleData);
+        HashSet<Triangle2> triangles_2d_normalized = _TransformBetweenDataStructures.HalfEdge2ToTriangle2(triangleData_normalized);
 
         //From 2d to 3d
         HashSet<Triangle3> triangles_3d = new HashSet<Triangle3>();
 
-        foreach (Triangle2 t in triangles_2d)
+        foreach (Triangle2 t in triangles_2d_normalized)
         {
-            triangles_3d.Add(new Triangle3(t.p1.ToMyVector3(), t.p2.ToMyVector3(), t.p3.ToMyVector3()));
+            //UnNormalize here
+            triangles_3d.Add(new Triangle3(HelpMethods.UnNormalize(t.p1, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p2, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p3, normalizingBox, dMax).ToMyVector3()));
         }
 
         triangulatedMesh = _TransformBetweenDataStructures.Triangle3ToCompressedMesh(triangles_3d, triangulatedMesh); 
