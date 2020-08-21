@@ -5,7 +5,6 @@ using Habrador_Computational_Geometry;
 
 public class DelaunayIncrementalController : MonoBehaviour
 {
-    public List<Transform> points;
     Mesh triangulatedMesh;
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
