@@ -5,11 +5,13 @@ using Habrador_Computational_Geometry;
 
 public class DelaunayIncrementalController : MonoBehaviour
 {
+    public List<Transform> points;
     Mesh triangulatedMesh;
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
     public Rect bounds;
     AABB2 normalizingBox; // Rect in Habrador? what's the difference to Rect??
+    float dMax;
     HalfEdgeData2 triangleData_normalized;
 
     void Start()
@@ -17,6 +19,7 @@ public class DelaunayIncrementalController : MonoBehaviour
         InitializeMeshComponents();
 
         normalizingBox = new AABB2(bounds.xMin, bounds.xMax, bounds.yMin, bounds.yMax);
+        dMax = HelpMethods.CalculateDMax(normalizingBox);
 
         // Triangle2 superTriangle = new Triangle2(new MyVector2(-10f, -10f), new MyVector2(10f, -10f), new MyVector2(0f, 10f));
         Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(1f, 0f), new MyVector2(0f, 1f));
