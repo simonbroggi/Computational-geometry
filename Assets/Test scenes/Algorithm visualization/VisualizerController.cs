@@ -22,9 +22,6 @@ public class VisualizerController : MonoBehaviour
     //To make it faster to unnormalize the data when we display it 
     private AABB2 normalizingBox;
 
-    private float dMax;
-
-
     //Used for visualizing purposes
 
     //Triangles that has different colors
@@ -85,9 +82,7 @@ public class VisualizerController : MonoBehaviour
 
         normalizingBox = new AABB2(new List<MyVector2>(points_2d));
 
-        dMax = HelpMethods.CalculateDMax(normalizingBox);
-
-        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox, dMax);
+        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox);
 
 
         //Visualization 1. Delaunay flip edges
@@ -274,9 +269,9 @@ public class VisualizerController : MonoBehaviour
                 MyVector2 p3 = t.p3;
 
                 //Unnormalize the point
-                p1 = HelpMethods.UnNormalize(p1, normalizingBox, dMax);
-                p2 = HelpMethods.UnNormalize(p2, normalizingBox, dMax);
-                p3 = HelpMethods.UnNormalize(p3, normalizingBox, dMax);
+                p1 = HelpMethods.UnNormalize(p1, normalizingBox);
+                p2 = HelpMethods.UnNormalize(p2, normalizingBox);
+                p3 = HelpMethods.UnNormalize(p3, normalizingBox);
 
                 Triangle2 t_unnormalized = new Triangle2(p1, p2, p3);
 
@@ -381,14 +376,14 @@ public class VisualizerController : MonoBehaviour
 
     public MyVector2 UnNormalize(MyVector2 p)
     {
-        return HelpMethods.UnNormalize(p, normalizingBox, dMax);
+        return HelpMethods.UnNormalize(p, normalizingBox);
     }
 
 
 
     public void SetActivePoint(MyVector2 p)
     {
-        activePoint = HelpMethods.UnNormalize(p, normalizingBox, dMax);
+        activePoint = HelpMethods.UnNormalize(p, normalizingBox);
     }
 
 

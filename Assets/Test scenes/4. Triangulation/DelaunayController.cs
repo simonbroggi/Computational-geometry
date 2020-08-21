@@ -50,9 +50,9 @@ public class DelaunayController : MonoBehaviour
 
         float dMax = HelpMethods.CalculateDMax(normalizingBox);
 
-        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox, dMax);
+        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox);
 
-        List<MyVector2> constraints_2d_normalized = HelpMethods.Normalize(constraints_2d, normalizingBox, dMax);
+        List<MyVector2> constraints_2d_normalized = HelpMethods.Normalize(constraints_2d, normalizingBox);
 
 
 
@@ -74,7 +74,7 @@ public class DelaunayController : MonoBehaviour
 
 
         //UnNormalize
-        HalfEdgeData2 triangleData = HelpMethods.UnNormalize(triangleData_normalized, normalizingBox, dMax);
+        HalfEdgeData2 triangleData = HelpMethods.UnNormalize(triangleData_normalized, normalizingBox);
 
         //From half-edge to triangle
         HashSet<Triangle2> triangles_2d = _TransformBetweenDataStructures.HalfEdge2ToTriangle2(triangleData);

@@ -62,7 +62,7 @@ public class TriangulatePointsController : MonoBehaviour
 
         float dMax = HelpMethods.CalculateDMax(normalizingBox);
 
-        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox, dMax);
+        HashSet<MyVector2> points_2d_normalized = HelpMethods.Normalize(points_2d, normalizingBox);
 
 
 
@@ -116,7 +116,7 @@ public class TriangulatePointsController : MonoBehaviour
         if (triangles_2d_normalized != null)
         {
             //Unnormalized the triangles
-            HashSet<Triangle2> triangles_2d = HelpMethods.UnNormalize(triangles_2d_normalized, normalizingBox, dMax);
+            HashSet<Triangle2> triangles_2d = HelpMethods.UnNormalize(triangles_2d_normalized, normalizingBox);
 
             testTriangles = triangles_2d;
 
