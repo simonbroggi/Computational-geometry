@@ -125,7 +125,7 @@ namespace Habrador_Computational_Geometry
         //
         //Split a face (which we know is a triangle) at a point to create three new triangles while removing the old triangle
         //Could maybe make it more general so we can split a face, which consists of n edges
-        public static void SplitTriangleFaceAtPoint(HalfEdgeFace2 f, MyVector2 splitPosition, HalfEdgeData2 data)
+        public static void SplitTriangleFaceAtPoint(HalfEdgeFace2 f, MyVector2 splitPosition, HalfEdgeData2 data, Color? splitColor = null)
         {
             //The edges that belongs to this face
             HalfEdge2 e_1 = f.edge;
@@ -135,9 +135,9 @@ namespace Habrador_Computational_Geometry
             //A list with new edges so we can connect the new edges with an edge on the opposite side
             HashSet<HalfEdge2> newEdges = new HashSet<HalfEdge2>();
 
-            CreateNewFace(e_1, splitPosition, data, newEdges);
-            CreateNewFace(e_2, splitPosition, data, newEdges);
-            CreateNewFace(e_3, splitPosition, data, newEdges);
+            CreateNewFace(e_1, splitPosition, data, newEdges, splitColor);
+            CreateNewFace(e_2, splitPosition, data, newEdges, splitColor);
+            CreateNewFace(e_3, splitPosition, data, newEdges, splitColor);
 
             //Debug.Log("New edges " + newEdges.Count);
 
@@ -181,17 +181,19 @@ namespace Habrador_Computational_Geometry
 
 
         //Create a new triangle face
-        private static void CreateNewFace(HalfEdge2 e_old, MyVector2 splitPosition, HalfEdgeData2 data, HashSet<HalfEdge2> newEdges)
+        private static void CreateNewFace(HalfEdge2 e_old, MyVector2 splitPosition, HalfEdgeData2 data, HashSet<HalfEdge2> newEdges, Color? splitColor = null)
         {
             //This triangle has the following positons
             MyVector2 p_split = splitPosition;
             MyVector2 p_next = e_old.prevEdge.v.position;
+            Color c_next = e_old.prevEdge.v.color;
             MyVector2 p_prev = e_old.v.position;
+            Color c_prev = e_old.v.color;
 
             //Create the new stuff
-            HalfEdgeVertex2 v_split = new HalfEdgeVertex2(p_split);
-            HalfEdgeVertex2 v_next = new HalfEdgeVertex2(p_next);
-            HalfEdgeVertex2 v_prev = new HalfEdgeVertex2(p_prev);
+            HalfEdgeVertex2 v_split = new HalfEdgeVertex2(p_split, splitColor);
+            HalfEdgeVertex2 v_next = new HalfEdgeVertex2(p_next, c_next);
+            HalfEdgeVertex2 v_prev = new HalfEdgeVertex2(p_prev, c_prev);
 
             //This is the edge that has the same position as the old edge 
             HalfEdge2 e_1 = new HalfEdge2(v_prev);

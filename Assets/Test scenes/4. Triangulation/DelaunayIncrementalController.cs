@@ -67,7 +67,8 @@ public class DelaunayIncrementalController : MonoBehaviour
         // random value within bounds, normalized
         float x = (normalizingBox.maxX - normalizingBox.minX) * Random.value / dMax;
         float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
-        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges);
+        Color color = Random.ColorHSV();
+        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, color);
     }
 
     private void Update()

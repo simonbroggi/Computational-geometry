@@ -83,10 +83,12 @@ namespace Habrador_Computational_Geometry
         //Might seem strange because each halfEdge references a vertex the edge is going to?
         public HalfEdge2 edge;
 
+        public Color color;
 
 
-        public HalfEdgeVertex2(MyVector2 position)
+        public HalfEdgeVertex2(MyVector2 position, Color? c = null)
         {
+            this.color = c==null ? Color.white : c.Value;
             this.position = position;
         }
     }
