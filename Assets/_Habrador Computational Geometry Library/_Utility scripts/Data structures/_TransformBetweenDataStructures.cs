@@ -329,16 +329,54 @@ namespace Habrador_Computational_Geometry
             }
         }
 
-        public static Mesh VoronoiCellToMesh(VoronoiCell2 cell, Mesh mesh = null)
+        public static Mesh VoronoiToMesh(List<VoronoiCell2> voronoiCells, Mesh mesh = null)
+        {
+            if(mesh == null)
+            {
+                mesh = new Mesh();
+            }
+            else
+            {
+                mesh.Clear();
+            }
+
+            for (int i = 0; i < voronoiCells.Count; i++)
+            {
+                VoronoiCell2 cell = voronoiCells[i];
+                mesh = VoronoiCellToMesh(cell, mesh, true);
+            }
+            return mesh;
+        }
+
+        public static Mesh VoronoiCellToMesh(VoronoiCell2 cell, Mesh mesh = null, bool appendToMesh = false)
         {
             Vector3 p1 = cell.sitePos.ToVector3();
 
-            Gizmos.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1f);
+            List<Vector3> vertices;
+            List<int> triangles;
 
-            List<Vector3> vertices = new List<Vector3>();
+            if(mesh == null)
+            {
+                mesh = new Mesh();
+                vertices = new List<Vector3>();
+                triangles = new List<int>();
+            }
+            else
+            {
+                if(appendToMesh)
+                {
+                    vertices = new List<Vector3>(mesh.vertices);
+                    triangles = new List<int>(mesh.triangles);
+                }
+                else
+                {
+                    mesh.Clear();
+                    vertices = new List<Vector3>();
+                    triangles = new List<int>();
+                }
+            }
 
-            List<int> triangles = new List<int>();
-
+            int p1Index = vertices.Count;
             vertices.Add(p1);
 
             for (int j = 0; j < cell.edges.Count; j++)
@@ -350,19 +388,10 @@ namespace Habrador_Computational_Geometry
                 vertices.Add(p3);
                 vertices.Add(p2);
 
-                triangles.Add(0);
+                triangles.Add(p1Index);
                 triangles.Add(vertices.Count - 2);
                 triangles.Add(vertices.Count - 1);
 
-            }
-            
-            if(mesh == null)
-            {
-                mesh = new Mesh();
-            }
-            else
-            {
-                mesh.Clear();
             }
 
             mesh.vertices = vertices.ToArray();

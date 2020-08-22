@@ -69,6 +69,8 @@ public class DelaunayIncrementalController : MonoBehaviour
         float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
         Color color = Random.ColorHSV();
         DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, color);
+
+        delaunayMeshNeedsUpdate = true;
     }
 
     private void Update()
@@ -76,12 +78,25 @@ public class DelaunayIncrementalController : MonoBehaviour
         if(Input.GetKey(KeyCode.Space))
         {
             AddRandomPoint();
-            delaunayMeshNeedsUpdate = true;
         }
 
         if(delaunayMeshNeedsUpdate)
         {
-            triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
+            //triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
+            
+            //--Voronoi--//
+            // create cells
+            List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized);
+            
+            // unnormalize
+            voronoiCells = HelpMethods.UnNormalize(voronoiCells, normalizingBox, dMax);
+
+            // if(voronoiCells.Count > 0)
+            //     triangulatedMesh = _TransformBetweenDataStructures.VoronoiCellToMesh(voronoiCells[voronoiCells.Count-1], triangulatedMesh);
+            triangulatedMesh = _TransformBetweenDataStructures.VoronoiToMesh(voronoiCells, triangulatedMesh);
+
+            //----//
+            
             delaunayMeshNeedsUpdate = false;
         }
     }
