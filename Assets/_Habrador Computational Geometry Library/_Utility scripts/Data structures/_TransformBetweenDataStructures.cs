@@ -354,12 +354,17 @@ namespace Habrador_Computational_Geometry
 
             List<Vector3> vertices;
             List<int> triangles;
+            List<Color32> colors;
+
+            // todo: get cell color
+            Color32 cellColor = Color.red;// cell.color;
 
             if(mesh == null)
             {
                 mesh = new Mesh();
                 vertices = new List<Vector3>();
                 triangles = new List<int>();
+                colors = new List<Color32>();
             }
             else
             {
@@ -367,17 +372,19 @@ namespace Habrador_Computational_Geometry
                 {
                     vertices = new List<Vector3>(mesh.vertices);
                     triangles = new List<int>(mesh.triangles);
+                    colors = new List<Color32>(mesh.colors32);
                 }
                 else
                 {
                     mesh.Clear();
                     vertices = new List<Vector3>();
                     triangles = new List<int>();
+                    colors = new List<Color32>();
                 }
             }
 
             int p1Index = vertices.Count;
-            vertices.Add(p1);
+            vertices.Add(p1); colors.Add(cellColor);
 
             for (int j = 0; j < cell.edges.Count; j++)
             {
@@ -385,8 +392,8 @@ namespace Habrador_Computational_Geometry
                 Vector3 p3 = cell.edges[j].p2.ToVector3();
 
                 //p3 before p2 to get correct orientation pr the triangle will be upside-down
-                vertices.Add(p3);
-                vertices.Add(p2);
+                vertices.Add(p3); colors.Add(cellColor);
+                vertices.Add(p2); colors.Add(cellColor);
 
                 triangles.Add(p1Index);
                 triangles.Add(vertices.Count - 2);
@@ -395,8 +402,8 @@ namespace Habrador_Computational_Geometry
             }
 
             mesh.vertices = vertices.ToArray();
-
             mesh.triangles = triangles.ToArray();
+            mesh.colors32 = colors.ToArray();
 
             mesh.RecalculateNormals();
 

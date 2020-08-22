@@ -33,6 +33,8 @@ namespace Habrador_Computational_Geometry
 
         public List<VoronoiEdge2> edges = new List<VoronoiEdge2>();
 
+        public Color color;
+
         public VoronoiCell2(MyVector2 sitePos)
         {
             this.sitePos = sitePos;

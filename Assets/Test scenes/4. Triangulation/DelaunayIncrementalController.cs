@@ -92,7 +92,10 @@ public class DelaunayIncrementalController : MonoBehaviour
             voronoiCells = HelpMethods.UnNormalize(voronoiCells, normalizingBox, dMax);
 
             // if(voronoiCells.Count > 0)
+            // {
+            //     triangulatedMesh.Clear();
             //     triangulatedMesh = _TransformBetweenDataStructures.VoronoiCellToMesh(voronoiCells[voronoiCells.Count-1], triangulatedMesh);
+            // }
             triangulatedMesh = _TransformBetweenDataStructures.VoronoiToMesh(voronoiCells, triangulatedMesh);
 
             //----//
