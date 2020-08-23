@@ -23,8 +23,8 @@ public class DelaunayIncrementalController : MonoBehaviour
         // Triangle2 superTriangle = new Triangle2(new MyVector2(-10f, -10f), new MyVector2(10f, -10f), new MyVector2(0f, 10f));
         float rightNormalized = (normalizingBox.maxX - normalizingBox.minX) / dMax;
         float topNormalized = (normalizingBox.maxY - normalizingBox.minY) / dMax;
-        Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(rightNormalized, 0f), new MyVector2(0f, topNormalized));
-        Triangle2 quadTri2 = new Triangle2(new MyVector2(rightNormalized, 0f), new MyVector2(rightNormalized, topNormalized), new MyVector2(0f, topNormalized));
+        Triangle2 quadTri1 = new Triangle2(new MyVector2(0f, 0f), new MyVector2(rightNormalized, 0f), new MyVector2(0f, topNormalized), Color.cyan, Color.magenta, Color.yellow);
+        Triangle2 quadTri2 = new Triangle2(new MyVector2(rightNormalized, 0f), new MyVector2(rightNormalized, topNormalized), new MyVector2(0f, topNormalized), Color.magenta, Color.black, Color.yellow);
         
 
         //Create the triangulation data with a quad
@@ -35,6 +35,9 @@ public class DelaunayIncrementalController : MonoBehaviour
         //Change to half-edge data structure
         delaunayData_normalized = new HalfEdgeData2();
         _TransformBetweenDataStructures.Triangle2ToHalfEdge2(triangles_normalized, delaunayData_normalized);
+
+        // Update mesh
+        triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
     }
 
     void InitializeMeshComponents()
@@ -82,9 +85,10 @@ public class DelaunayIncrementalController : MonoBehaviour
 
         if(delaunayMeshNeedsUpdate)
         {
-            //triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
+            triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
             
             //--Voronoi--//
+            /*
             // create cells
             List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized);
             
@@ -97,7 +101,7 @@ public class DelaunayIncrementalController : MonoBehaviour
             //     triangulatedMesh = _TransformBetweenDataStructures.VoronoiCellToMesh(voronoiCells[voronoiCells.Count-1], triangulatedMesh);
             // }
             triangulatedMesh = _TransformBetweenDataStructures.VoronoiToMesh(voronoiCells, triangulatedMesh);
-
+            */
             //----//
             
             delaunayMeshNeedsUpdate = false;
@@ -117,10 +121,13 @@ public class DelaunayIncrementalController : MonoBehaviour
         foreach (Triangle2 t in triangles_2d_normalized)
         {
             //UnNormalize here
-            triangles_3d.Add(new Triangle3(HelpMethods.UnNormalize(t.p1, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p2, normalizingBox, dMax).ToMyVector3(), HelpMethods.UnNormalize(t.p3, normalizingBox, dMax).ToMyVector3()));
+            triangles_3d.Add(new Triangle3( HelpMethods.UnNormalize(t.p1, normalizingBox, dMax).ToMyVector3(),
+                                            HelpMethods.UnNormalize(t.p2, normalizingBox, dMax).ToMyVector3(),
+                                            HelpMethods.UnNormalize(t.p3, normalizingBox, dMax).ToMyVector3(),
+                                            t.c1, t.c2, t.c3));
         }
 
-        return _TransformBetweenDataStructures.Triangle3ToCompressedMesh(triangles_3d, mesh); 
+        return _TransformBetweenDataStructures.Triangle3ToMesh(triangles_3d, mesh); 
     }
 
 }

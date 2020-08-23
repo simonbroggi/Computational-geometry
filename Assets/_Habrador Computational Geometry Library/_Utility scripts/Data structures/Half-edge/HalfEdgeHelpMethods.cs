@@ -22,10 +22,10 @@ namespace Habrador_Computational_Geometry
             HalfEdge2 e_5 = e_4.nextEdge;
             HalfEdge2 e_6 = e_4.prevEdge;
             //The 4 vertex positions
-            MyVector2 aPos = e_1.v.position;
-            MyVector2 bPos = e_2.v.position;
-            MyVector2 cPos = e_3.v.position;
-            MyVector2 dPos = e_5.v.position;
+            MyVector2 aPos = e_1.v.position; Color32 aCol = e_1.v.color;
+            MyVector2 bPos = e_2.v.position; Color32 bCol = e_2.v.color;
+            MyVector2 cPos = e_3.v.position; Color32 cCol = e_3.v.color;
+            MyVector2 dPos = e_5.v.position; Color32 dCol = e_5.v.color;
 
             //The 6 old vertices, we can use
             HalfEdgeVertex2 a_old = e_1.v;
@@ -44,9 +44,9 @@ namespace Habrador_Computational_Geometry
             HalfEdgeVertex2 d = d_old;
             //Triangle 1: b-d-a
             HalfEdgeVertex2 b_opposite = a_opposite_old;
-            b_opposite.position = bPos;
+            b_opposite.position = bPos; b_opposite.color = bCol;
             HalfEdgeVertex2 d_opposite = c_opposite_old;
-            d_opposite.position = dPos;
+            d_opposite.position = dPos; d_opposite.color = dCol;
             HalfEdgeVertex2 a = a_old;
 
 

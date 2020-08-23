@@ -22,6 +22,9 @@ namespace Habrador_Computational_Geometry
                 HalfEdgeVertex2 v1 = new HalfEdgeVertex2(t.p1);
                 HalfEdgeVertex2 v2 = new HalfEdgeVertex2(t.p2);
                 HalfEdgeVertex2 v3 = new HalfEdgeVertex2(t.p3);
+                v1.color = t.c1;
+                v2.color = t.c2;
+                v3.color = t.c3;
 
                 //The vertices the edge points to
                 HalfEdge2 he1 = new HalfEdge2(v1);
@@ -112,7 +115,7 @@ namespace Habrador_Computational_Geometry
                 MyVector2 p2 = face.edge.nextEdge.v.position;
                 MyVector2 p3 = face.edge.nextEdge.nextEdge.v.position;
 
-                Triangle2 t = new Triangle2(p1, p2, p3);
+                Triangle2 t = new Triangle2(p1, p2, p3, face.edge.v.color, face.edge.nextEdge.v.color, face.edge.nextEdge.nextEdge.v.color);
 
                 triangles.Add(t);
             }
@@ -252,6 +255,8 @@ namespace Habrador_Computational_Geometry
             //Create the list with all triangles
             List<int> meshTriangles = new List<int>();
 
+            List<Color32> meshColors = new List<Color32>();
+
             int arrayPos = 0;
 
             foreach (Triangle3 t in triangles)
@@ -263,6 +268,10 @@ namespace Habrador_Computational_Geometry
                 meshVertices.Add(v1);
                 meshVertices.Add(v2);
                 meshVertices.Add(v3);
+
+                meshColors.Add(t.c1);
+                meshColors.Add(t.c2);
+                meshColors.Add(t.c3);
 
                 meshTriangles.Add(arrayPos + 0);
                 meshTriangles.Add(arrayPos + 1);
@@ -292,6 +301,7 @@ namespace Habrador_Computational_Geometry
             }
 
             mesh.vertices = meshVerticesArray;
+            mesh.colors32 = meshColors.ToArray();
             mesh.triangles = meshTriangles.ToArray();
 
             return mesh;
