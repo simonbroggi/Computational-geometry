@@ -356,8 +356,7 @@ namespace Habrador_Computational_Geometry
             List<int> triangles;
             List<Color32> colors;
 
-            // todo: get cell color
-            Color32 cellColor = Color.red;// cell.color;
+            Color32 cellColor = cell.color;
 
             if(mesh == null)
             {

@@ -159,7 +159,7 @@ namespace Habrador_Computational_Geometry
             {
                 MyVector2 sitePosUnNormalized = HelpMethods.UnNormalize(cell.sitePos, aabb, dMax);
 
-                VoronoiCell2 cellUnNormalized = new VoronoiCell2(sitePosUnNormalized);
+                VoronoiCell2 cellUnNormalized = new VoronoiCell2(sitePosUnNormalized, cell.color);
 
                 foreach (VoronoiEdge2 e in cell.edges)
                 {

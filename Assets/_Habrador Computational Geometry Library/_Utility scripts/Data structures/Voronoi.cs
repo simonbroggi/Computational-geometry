@@ -35,9 +35,10 @@ namespace Habrador_Computational_Geometry
 
         public Color color;
 
-        public VoronoiCell2(MyVector2 sitePos)
+        public VoronoiCell2(MyVector2 sitePos, Color color)
         {
             this.sitePos = sitePos;
+            this.color = color;
         }
     }
 }

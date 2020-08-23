@@ -68,8 +68,8 @@ namespace Habrador_Computational_Geometry
                 //No cell was found so we need to create a new cell
                 if (cellPos == -1)
                 {
-                    VoronoiCell2 newCell = new VoronoiCell2(e.sitePos);
-                    newCell.color = Random.ColorHSV(); // ToDo get color from halfedge vert
+                    VoronoiCell2 newCell = new VoronoiCell2(e.sitePos, Random.ColorHSV());
+                    //newCell.color = Color.green;// Random.ColorHSV(); // ToDo get color from halfedge vert
 
                     voronoiCells.Add(newCell);
 
