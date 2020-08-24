@@ -166,7 +166,7 @@ namespace Habrador_Computational_Geometry
                     MyVector2 p1UnNormalized = HelpMethods.UnNormalize(e.p1, aabb, dMax);
                     MyVector2 p2UnNormalized = HelpMethods.UnNormalize(e.p2, aabb, dMax);
 
-                    VoronoiEdge2 eUnNormalized = new VoronoiEdge2(p1UnNormalized, p2UnNormalized, sitePosUnNormalized);
+                    VoronoiEdge2 eUnNormalized = new VoronoiEdge2(p1UnNormalized, p2UnNormalized, sitePosUnNormalized, cell.color);
 
                     cellUnNormalized.edges.Add(eUnNormalized);
                 }
