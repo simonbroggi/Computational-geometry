@@ -22,7 +22,7 @@ namespace Habrador_Computational_Geometry
             return GenerateVoronoiFromDelaunay(data);
         }
 
-        public static List<VoronoiCell2> GenerateVoronoiFromDelaunay(HalfEdgeData2 delaunayData)
+        public static List<VoronoiCell2> GenerateVoronoiFromDelaunay(HalfEdgeData2 delaunayData, bool weightFromAlpha = false)
         {
             //Step 1. For every delaunay edge, compute a voronoi edge
             //The voronoi edge is the edge connecting the circumcenters of two neighboring delaunay triangles
@@ -46,6 +46,20 @@ namespace Habrador_Computational_Geometry
                 //The circumcenter is also known as a voronoi vertex, which is a position in the diagram where we are equally
                 //close to the surrounding sites
                 MyVector2 voronoiVertex = _Geometry.CalculateCircleCenter(v1, v2, v3);
+
+                // pull voronoiVertex towards verts with higher alpha
+                if(weightFromAlpha)
+                {
+                    //TODO
+                    int totalWieght = e1.v.color.a + e2.v.color.a + e3.v.color.a;
+                    float restWeight = (float)totalWieght / 3f;
+                    float pull1 = ((float)e1.v.color.a - restWeight)/255f;
+                    float pull2 = ((float)e2.v.color.a - restWeight)/255f;
+                    float pull3 = ((float)e3.v.color.a - restWeight)/255f;
+                    Debug.Log("somethings wrong " + pull1 + " - " + pull2 + " - " + pull3);
+                    voronoiVertex = voronoiVertex + e1.v.position * pull1 + e2.v.position * pull2 + e3.v.position * pull3;
+                }
+
                 //Debug.Log(voronoiVertex.x + " " + voronoiVertex.y);
                 //This will generate double edges - one belonging to each site, and could maybe be improved in the future
                 //by using the half-edge data structure

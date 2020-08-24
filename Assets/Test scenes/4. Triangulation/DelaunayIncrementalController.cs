@@ -70,13 +70,26 @@ public class DelaunayIncrementalController : MonoBehaviour
         // random value within bounds, normalized
         float x = (normalizingBox.maxX - normalizingBox.minX) * Random.value / dMax;
         float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
-        Color color = Random.ColorHSV();
-        List<HalfEdgeVertex2> newVerts = DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, color);
+        
+        SetLastAddedVertAlpha(255);
+
+        lastAddedColor = Random.ColorHSV(0f, 1f, 0f, 1f, 0.8f, 1f, .5f, .5f);
+        List<HalfEdgeVertex2> newVerts = DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, lastAddedColor);
         
         meshNeedsUpdate = true;
         lastAddedVers = newVerts;
     }
-    List<HalfEdgeVertex2> lastAddedVers;
+
+    void SetLastAddedVertAlpha(byte a)
+    {
+        lastAddedColor.a = a;
+        foreach(HalfEdgeVertex2 v in lastAddedVers)
+        {
+            v.color = lastAddedColor;
+        }
+    }
+    List<HalfEdgeVertex2> lastAddedVers = new List<HalfEdgeVertex2>();
+    Color32 lastAddedColor;
 
     public bool voronoi = false;
     void OnValidate()
@@ -90,15 +103,6 @@ public class DelaunayIncrementalController : MonoBehaviour
             AddRandomPoint();
         }
 
-        if(lastAddedVers != null) {
-            Color32 randomColor = Random.ColorHSV();
-            foreach(HalfEdgeVertex2 vert in lastAddedVers)
-            {
-                vert.color = randomColor;
-            }
-            meshNeedsUpdate = true;
-        }
-
         if(meshNeedsUpdate)
         {
             if(!voronoi)
@@ -108,7 +112,7 @@ public class DelaunayIncrementalController : MonoBehaviour
             else
             {
                 // create cells
-                List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized);
+                List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized, true);
                 
                 // unnormalize
                 voronoiCells = HelpMethods.UnNormalize(voronoiCells, normalizingBox, dMax);
