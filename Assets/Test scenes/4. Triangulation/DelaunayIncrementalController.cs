@@ -71,11 +71,18 @@ public class DelaunayIncrementalController : MonoBehaviour
         float x = (normalizingBox.maxX - normalizingBox.minX) * Random.value / dMax;
         float y = (normalizingBox.maxY - normalizingBox.minY) * Random.value / dMax;
         Color color = Random.ColorHSV();
-        DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, color);
-
-        delaunayMeshNeedsUpdate = true;
+        List<HalfEdgeVertex2> newVerts = DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, color);
+        
+        meshNeedsUpdate = true;
+        lastAddedVers = newVerts;
     }
+    List<HalfEdgeVertex2> lastAddedVers;
 
+    public bool voronoi = false;
+    void OnValidate()
+    {
+        meshNeedsUpdate = true;
+    }
     private void Update()
     {
         if(Input.GetKey(KeyCode.Space))
@@ -83,32 +90,42 @@ public class DelaunayIncrementalController : MonoBehaviour
             AddRandomPoint();
         }
 
-        if(delaunayMeshNeedsUpdate)
-        {
-            triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
-            
-            //--Voronoi--//
-            /*
-            // create cells
-            List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized);
-            
-            // unnormalize
-            voronoiCells = HelpMethods.UnNormalize(voronoiCells, normalizingBox, dMax);
+        if(lastAddedVers != null) {
+            Color32 randomColor = Random.ColorHSV();
+            foreach(HalfEdgeVertex2 vert in lastAddedVers)
+            {
+                vert.color = randomColor;
+            }
+            meshNeedsUpdate = true;
+        }
 
-            // if(voronoiCells.Count > 0)
-            // {
-            //     triangulatedMesh.Clear();
-            //     triangulatedMesh = _TransformBetweenDataStructures.VoronoiCellToMesh(voronoiCells[voronoiCells.Count-1], triangulatedMesh);
-            // }
-            triangulatedMesh = _TransformBetweenDataStructures.VoronoiToMesh(voronoiCells, triangulatedMesh);
-            */
-            //----//
+        if(meshNeedsUpdate)
+        {
+            if(!voronoi)
+            {
+                triangulatedMesh = CreateUnnormalizedMesh(delaunayData_normalized, triangulatedMesh);
+            }
+            else
+            {
+                // create cells
+                List<VoronoiCell2> voronoiCells = DelaunayToVoronoiAlgorithm.GenerateVoronoiFromDelaunay(delaunayData_normalized);
+                
+                // unnormalize
+                voronoiCells = HelpMethods.UnNormalize(voronoiCells, normalizingBox, dMax);
+
+                // if(voronoiCells.Count > 0)
+                // {
+                //     triangulatedMesh.Clear();
+                //     triangulatedMesh = _TransformBetweenDataStructures.VoronoiCellToMesh(voronoiCells[voronoiCells.Count-1], triangulatedMesh);
+                // }
+                triangulatedMesh = _TransformBetweenDataStructures.VoronoiToMesh(voronoiCells, triangulatedMesh);
+            }
             
-            delaunayMeshNeedsUpdate = false;
+            meshNeedsUpdate = false;
         }
     }
     
-    bool delaunayMeshNeedsUpdate = false;
+    bool meshNeedsUpdate = false;
 
     Mesh CreateUnnormalizedMesh(HalfEdgeData2 data_normalized, Mesh mesh)
     {

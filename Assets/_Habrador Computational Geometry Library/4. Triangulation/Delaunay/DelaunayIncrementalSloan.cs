@@ -91,7 +91,7 @@ namespace Habrador_Computational_Geometry
 
 
         //Insert a new point in the triangulation we already have, so we need at least one triangle
-        public static void InsertNewPointInTriangulation(MyVector2 p, HalfEdgeData2 triangulationData, ref int missedPoints, ref int flippedEdges, Color? color=null)
+        public static List<HalfEdgeVertex2> InsertNewPointInTriangulation(MyVector2 p, HalfEdgeData2 triangulationData, ref int missedPoints, ref int flippedEdges, Color? color=null)
         {
             //Step 5. Insert the new point in the triangulation
             //Find the existing triangle the point is in
@@ -104,7 +104,7 @@ namespace Habrador_Computational_Geometry
             }
 
             //Delete this triangle and form 3 new triangles by connecting p to each of the vertices in the old triangle
-            HalfEdgeHelpMethods.SplitTriangleFaceAtPoint(f, p, triangulationData, color);
+            List<HalfEdgeVertex2> newVerts = HalfEdgeHelpMethods.SplitTriangleFaceAtPoint(f, p, triangulationData, color);
 
 
             //Step 6. Initialize stack. Place all triangles which are adjacent to the edges opposite p on a LIFO stack
@@ -142,6 +142,11 @@ namespace Habrador_Computational_Geometry
                 if (DelaunayMethods.ShouldFlipEdgeStable(a, b, c, p))
                 {
                     HalfEdgeHelpMethods.FlipTriangleEdge(edgeToTest);
+                    newVerts.Add(edgeToTest.oppositeEdge.v); //this vert is also at position p
+                    if(!edgeToTest.oppositeEdge.v.position.Equals(p))
+                    {
+                        Debug.LogError("off by " + (edgeToTest.oppositeEdge.v.position - p));
+                    }
 
                     //Step 7.3. Place any triangles which are now opposite p on the stack
                     AddTrianglesOppositePToStack(p, trianglesToInvestigate, triangulationData);
@@ -149,6 +154,7 @@ namespace Habrador_Computational_Geometry
                     flippedEdges += 1;
                 }
             }
+            return newVerts;
         }
 
 
