@@ -56,8 +56,14 @@ namespace Habrador_Computational_Geometry
                     float pull1 = ((float)e1.v.color.a - restWeight)/255f;
                     float pull2 = ((float)e2.v.color.a - restWeight)/255f;
                     float pull3 = ((float)e3.v.color.a - restWeight)/255f;
+                    // pull1 = Mathf.Max(0f, pull1);
+                    // pull2 = Mathf.Max(0f, pull2);
+                    // pull3 = Mathf.Max(0f, pull3);
+                    
                     Debug.Log("somethings wrong " + pull1 + " - " + pull2 + " - " + pull3);
                     voronoiVertex = voronoiVertex + e1.v.position * pull1 + e2.v.position * pull2 + e3.v.position * pull3;
+                    voronoiVertex.x = voronoiVertex.x / (1f+pull1+pull2+pull3);
+                    voronoiVertex.y = voronoiVertex.y / (1f+pull1+pull2+pull3);
                 }
 
                 //Debug.Log(voronoiVertex.x + " " + voronoiVertex.y);

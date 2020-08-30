@@ -73,7 +73,7 @@ public class DelaunayIncrementalController : MonoBehaviour
         
         SetLastAddedVertAlpha(255);
 
-        lastAddedColor = Random.ColorHSV(0f, 1f, 0f, 1f, 0.8f, 1f, .5f, .5f);
+        lastAddedColor = Random.ColorHSV(0f, 1f, 0f, 1f, 0.8f, 1f, 0f, 1f);
         List<HalfEdgeVertex2> newVerts = DelaunayIncrementalSloan.InsertNewPointInTriangulation(new MyVector2(x, y), delaunayData_normalized, ref missedPoints, ref flippedEdges, lastAddedColor);
         
         meshNeedsUpdate = true;
